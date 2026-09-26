@@ -16,7 +16,7 @@ open window underneath it.
 ## Install
 
 ```bash
-git clone https://github.com/nayan/omarchy-task-switcher.git
+git clone https://github.com/raazztm/omarchy-task-switcher.git
 cd omarchy-task-switcher
 ./install.sh
 ```
