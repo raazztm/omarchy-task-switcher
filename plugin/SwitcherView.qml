@@ -205,7 +205,7 @@ Item {
         width: view.panelW
         height: view.panelH
         radius: Math.round(14 * view.uiScale)
-        color: Util.alpha(Color.menu.background, 0.55)
+        color: Util.alpha(Color.menu.background, 0.72)
         borderSpec: Border.surfaceSpec("menu", "border", Color.menu.border, 1)
 
         // Specular edge: the one cue that reads as glass rather than a
