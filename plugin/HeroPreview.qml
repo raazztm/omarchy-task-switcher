@@ -26,11 +26,12 @@ Item {
     readonly property bool hasPreview: capture.hasContent && hero.entry !== null
 
     // Dark inset well: the capture always separates from the panel, whatever
-    // the captured window looks like.
+    // the captured window looks like. Near-opaque, because the card behind it
+    // is a solid surface and a see-through well would only add noise.
     BorderSurface {
         anchors.fill: parent
         radius: Math.round(10 * hero.uiScale)
-        color: Util.alpha("#000000", 0.42)
+        color: Util.alpha("#000000", 0.55)
         borderSpec: Border.flat(Util.alpha(Color.menu.text, 0.14), 1)
     }
 

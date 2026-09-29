@@ -39,12 +39,12 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        radius: Math.round(6 * row.uiScale)
+        radius: Math.round(7 * row.uiScale)
         color: row.selected
-            ? Util.alpha(Color.menu.selectedText, 0.15)
-            : (row.hovered ? Util.alpha(Color.menu.text, 0.06) : "transparent")
+            ? Util.alpha(Color.menu.selectedText, 0.18)
+            : (row.hovered ? Util.alpha(Color.menu.text, 0.09) : "transparent")
         border.width: row.selected ? 1 : 0
-        border.color: Util.alpha(Color.menu.selectedText, 0.45)
+        border.color: Util.alpha(Color.menu.selectedText, 0.55)
 
         Behavior on color {
             ColorAnimation {
@@ -58,7 +58,7 @@ Item {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         height: 1
-        color: Util.alpha(Color.menu.text, 0.07)
+        color: Util.alpha(Color.menu.text, 0.09)
         visible: !row.selected
     }
 
@@ -101,9 +101,11 @@ Item {
         elide: Text.ElideRight
         color: row.selected
             ? Color.menu.selectedText
-            : Util.alpha(Color.menu.text, 0.92)
+            : Color.menu.text
         font.family: Style.font.family
-        font.pixelSize: Math.round(Style.font.bodySmall * row.uiScale)
+        // Floors matter: a small [font] base-size would otherwise render the
+        // title line at 8px, which is unreadable regardless of opacity.
+        font.pixelSize: Math.max(10, Math.round(Style.font.bodySmall * row.uiScale))
         font.weight: Font.DemiBold
     }
 
@@ -116,10 +118,10 @@ Item {
         text: row.liveTitle
         elide: Text.ElideRight
         color: row.selected
-            ? Util.alpha(Color.menu.selectedText, 0.70)
-            : Util.alpha(Color.menu.text, 0.50)
+            ? Util.alpha(Color.menu.selectedText, 0.88)
+            : Util.alpha(Color.menu.text, 0.80)
         font.family: Style.font.family
-        font.pixelSize: Math.round(Style.font.caption * row.uiScale)
+        font.pixelSize: Math.max(9, Math.round(Style.font.caption * row.uiScale))
     }
 
     Row {
@@ -136,8 +138,8 @@ Item {
             height: Math.round(13 * row.uiScale)
             radius: Math.round(4 * row.uiScale)
             color: row.selected
-                ? Util.alpha(Color.menu.selectedText, 0.18)
-                : Util.alpha(Color.menu.text, 0.10)
+                ? Util.alpha(Color.menu.selectedText, 0.22)
+                : Util.alpha(Color.menu.text, 0.12)
 
             Text {
                 id: wsLabel
@@ -145,7 +147,7 @@ Item {
                 text: row.entry ? "ws " + row.entry.workspaceId : ""
                 color: row.selected
                     ? Util.alpha(Color.menu.selectedText, 0.9)
-                    : Util.alpha(Color.menu.text, 0.65)
+                    : Util.alpha(Color.menu.text, 0.72)
                 font.family: Style.font.family
                 font.pixelSize: Math.round(9 * row.uiScale)
             }
@@ -159,14 +161,14 @@ Item {
             radius: 3
             color: row.selected
                 ? Color.menu.selectedText
-                : Util.alpha(Color.menu.text, 0.12)
+                : Util.alpha(Color.menu.text, 0.14)
 
             Text {
                 anchors.centerIn: parent
                 text: row.rowIndex + 1
                 color: row.selected
                     ? Color.menu.background
-                    : Util.alpha(Color.menu.text, 0.70)
+                    : Util.alpha(Color.menu.text, 0.78)
                 font.family: Style.font.family
                 font.pixelSize: Math.round(9 * row.uiScale)
             }

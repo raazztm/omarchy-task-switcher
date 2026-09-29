@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Effects
 import Quickshell
 import Quickshell.Hyprland
 import qs.Commons
@@ -26,7 +25,7 @@ Item {
     readonly property int heroW: Math.round(560 * uiScale)
     readonly property int heroH: Math.round(320 * uiScale)
     readonly property int rowW: Math.round(176 * uiScale)
-    readonly property int rowH: Math.max(20, Math.round(30 * uiScale))
+    readonly property int rowH: Math.max(22, Math.round(32 * uiScale))
     readonly property int railGap: Math.max(3, Math.round(6 * uiScale))
     readonly property int railHeaderW: Math.max(12, Math.round(22 * uiScale))
     readonly property int gap: Math.max(6, Math.round(10 * uiScale))
@@ -58,6 +57,12 @@ Item {
         }
         return width
     }
+
+    // Opacity budget for the card. The wallpaper and window content sit
+    // directly behind the panel, so anything below ~0.9 turns the caption-size
+    // row text into a guessing game.
+    readonly property real panelAlpha: 0.99
+    readonly property real scrimAlpha: 0.62
 
     readonly property int maxRailW: Math.max(360, screenW - screenMargin * 2 - padding * 2)
     readonly property int contentW: Math.max(heroW, railW)
@@ -196,7 +201,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        color: Color.menu.scrim
+        color: Util.alpha(Color.menu.scrim, view.scrimAlpha)
     }
 
     BorderSurface {
@@ -204,30 +209,31 @@ Item {
         anchors.centerIn: parent
         width: view.panelW
         height: view.panelH
-        radius: Math.round(14 * view.uiScale)
-        color: Util.alpha(Color.menu.background, 0.72)
+        radius: Math.round(16 * view.uiScale)
+        color: Util.alpha(Color.menu.background, view.panelAlpha)
         borderSpec: Border.surfaceSpec("menu", "border", Color.menu.border, 1)
+        clip: true
 
-        // Specular edge: the one cue that reads as glass rather than a
-        // translucent rectangle.
+        // Lit from the top: a soft sheen instead of a flat fill, so a nearly
+        // opaque card still has depth rather than reading as a painted box.
         Rectangle {
-            anchors.top: parent.top
-            anchors.topMargin: 1
             anchors.left: parent.left
-            anchors.leftMargin: parent.radius
             anchors.right: parent.right
-            anchors.rightMargin: parent.radius
-            height: 1
-            color: Util.alpha(Color.menu.text, 0.13)
+            anchors.top: parent.top
+            height: Math.round(parent.height * 0.55)
+            gradient: Gradient {
+                GradientStop {
+                    position: 0.0
+                    color: Util.alpha(Color.menu.text, 0.07)
+                }
+                GradientStop {
+                    position: 1.0
+                    color: "transparent"
+                }
+            }
         }
 
-        layer.enabled: true
-        layer.effect: MultiEffect {
-            shadowEnabled: true
-            shadowBlur: 2.0
-            shadowScale: 1.06
-            shadowColor: Util.alpha("#000000", 0.55)
-        }
+        layer.enabled: false
 
         Item {
             id: header
@@ -262,10 +268,23 @@ Item {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 text: view.modeSummary
-                color: Util.alpha(Color.menu.text, 0.50)
+                color: Util.alpha(Color.menu.text, 0.62)
                 font.family: Style.font.family
                 font.pixelSize: Math.round(Style.font.caption * view.uiScale)
             }
+        }
+
+        // Hairlines give the card a header/body/footer structure instead of
+        // three text blocks floating in one field.
+        Rectangle {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: header.bottom
+            anchors.leftMargin: view.padding
+            anchors.rightMargin: view.padding
+            anchors.topMargin: 7
+            height: 1
+            color: Util.alpha(Color.menu.text, 0.08)
         }
 
         Item {
@@ -331,7 +350,7 @@ Item {
                                 anchors.verticalCenter: parent.verticalCenter
                                 width: 1
                                 height: view.rowH - Math.round(12 * view.uiScale)
-                                color: Util.alpha(Color.menu.text, 0.12)
+                                color: Util.alpha(Color.menu.text, 0.16)
                                 visible: cell.modelData.kind === "header"
                             }
 
@@ -341,7 +360,7 @@ Item {
                                 text: cell.modelData.count > 1
                                     ? cell.modelData.id + " · " + cell.modelData.count
                                     : String(cell.modelData.id > 0 ? cell.modelData.id : cell.modelData.count)
-                                color: Util.alpha(Color.menu.text, 0.45)
+                                color: Util.alpha(Color.menu.text, 0.62)
                                 font.family: Style.font.family
                                 font.pixelSize: Math.round(Style.font.caption * view.uiScale)
                                 font.weight: Font.DemiBold
@@ -373,7 +392,7 @@ Item {
                     visible: rail.contentWidth > rail.width && rail.contentWidth > 0
                     height: 3
                     radius: 2
-                    color: Util.alpha(Color.menu.text, 0.22)
+                    color: Util.alpha(Color.menu.text, 0.30)
                     width: Math.max(28, rail.width * rail.width / rail.contentWidth)
                     x: rail.x + (rail.contentX / Math.max(1, rail.contentWidth - rail.width))
                         * (rail.width - width)
@@ -390,7 +409,7 @@ Item {
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: "No open windows"
-                color: Util.alpha(Color.menu.text, 0.70)
+                color: Util.alpha(Color.menu.text, 0.80)
                 font.family: Style.font.family
                 font.pixelSize: Math.round(Style.font.body * view.uiScale)
             }
@@ -412,10 +431,21 @@ Item {
             anchors.margins: view.padding
             height: view.footerHeight
 
+            Rectangle {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                anchors.leftMargin: view.padding
+                anchors.rightMargin: view.padding
+                anchors.bottomMargin: 9
+                height: 1
+                color: Util.alpha(Color.menu.text, 0.08)
+            }
+
             Row {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
-                spacing: 10
+                spacing: 12
 
                 Repeater {
                     model: view.hints
@@ -423,7 +453,7 @@ Item {
                     Row {
                         required property var modelData
 
-                        spacing: 4
+                        spacing: 5
 
                         KeyCap {
                             uiScale: view.uiScale
@@ -436,8 +466,8 @@ Item {
                             anchors.verticalCenter: parent.verticalCenter
                             text: modelData.text
                             color: modelData.accent === true
-                                ? Util.alpha(Color.menu.text, 0.75)
-                                : Util.alpha(Color.menu.text, 0.45)
+                                ? Util.alpha(Color.menu.text, 0.88)
+                                : Util.alpha(Color.menu.text, 0.60)
                             font.family: Style.font.family
                             font.pixelSize: Math.round(Style.font.caption * view.uiScale)
                         }
