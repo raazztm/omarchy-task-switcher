@@ -98,8 +98,6 @@ Item {
         opened = false
         if (!entry) return
 
-        // Hand the focus over only after this overlay has released the
-        // keyboard, otherwise the compositor puts focus straight back.
         focusTimer.restart()
     }
 
@@ -108,8 +106,6 @@ Item {
         pendingEntry = null
         if (!entry) return
 
-        // This Hyprland evaluates dispatches as Lua, so the plain
-        // "focuswindow address:0x..." form is a syntax error.
         try {
             Hyprland.dispatch('hl.dsp.focus({ window = "address:0x' + String(entry.address) + '" })')
         } catch (error) {
@@ -179,49 +175,49 @@ Item {
     }
 
     GlobalShortcut {
-        appid: "nayan.task-switcher"
+        appid: "oma.task-switcher"
         name: "workspace-next"
         description: "Task switcher: next window on this workspace"
         onPressed: root.begin("workspace", 1)
     }
 
     GlobalShortcut {
-        appid: "nayan.task-switcher"
+        appid: "oma.task-switcher"
         name: "workspace-prev"
         description: "Task switcher: previous window on this workspace"
         onPressed: root.begin("workspace", -1)
     }
 
     GlobalShortcut {
-        appid: "nayan.task-switcher"
+        appid: "oma.task-switcher"
         name: "global-next"
         description: "Task switcher: next window on any workspace"
         onPressed: root.begin("global", 1)
     }
 
     GlobalShortcut {
-        appid: "nayan.task-switcher"
+        appid: "oma.task-switcher"
         name: "global-prev"
         description: "Task switcher: previous window on any workspace"
         onPressed: root.begin("global", -1)
     }
 
     GlobalShortcut {
-        appid: "nayan.task-switcher"
+        appid: "oma.task-switcher"
         name: "grouped-next"
         description: "Task switcher: next window grouped by workspace"
         onPressed: root.begin("grouped", 1)
     }
 
     GlobalShortcut {
-        appid: "nayan.task-switcher"
+        appid: "oma.task-switcher"
         name: "grouped-prev"
         description: "Task switcher: previous window grouped by workspace"
         onPressed: root.begin("grouped", -1)
     }
 
     GlobalShortcut {
-        appid: "nayan.task-switcher"
+        appid: "oma.task-switcher"
         name: "commit"
         description: "Task switcher: focus the highlighted window"
         onPressed: root.commit()
@@ -239,7 +235,7 @@ Item {
         }
         exclusionMode: ExclusionMode.Ignore
         color: "transparent"
-        WlrLayershell.namespace: "nayan-task-switcher"
+        WlrLayershell.namespace: "oma-task-switcher"
         WlrLayershell.layer: WlrLayer.Overlay
         WlrLayershell.keyboardFocus: root.opened ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
 

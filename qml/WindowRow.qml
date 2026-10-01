@@ -103,8 +103,6 @@ Item {
             ? Color.menu.selectedText
             : Color.menu.text
         font.family: Style.font.family
-        // Floors matter: a small [font] base-size would otherwise render the
-        // title line at 8px, which is unreadable regardless of opacity.
         font.pixelSize: Math.max(10, Math.round(Style.font.bodySmall * row.uiScale))
         font.weight: Font.DemiBold
     }

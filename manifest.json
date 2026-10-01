@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "id": "nayan.task-switcher",
+  "id": "oma.task-switcher",
   "name": "Task Switcher",
   "version": "1.0.0",
-  "author": "nayan",
+  "author": "oma.task-switcher contributors",
   "description": "Hold Alt+Tab, Super+Tab or Super+Alt+Tab for a live-preview window switcher. Super+Alt+Tab groups windows by workspace. Themes follow the active Omarchy theme.",
   "keepLoaded": true,
   "kinds": [
     "overlay"
   ],
   "entryPoints": {
-    "overlay": "TaskSwitcher.qml"
+    "overlay": "qml/TaskSwitcher.qml"
   }
 }

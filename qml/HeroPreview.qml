@@ -25,9 +25,6 @@ Item {
 
     readonly property bool hasPreview: capture.hasContent && hero.entry !== null
 
-    // Dark inset well: the capture always separates from the panel, whatever
-    // the captured window looks like. Near-opaque, because the card behind it
-    // is a solid surface and a see-through well would only add noise.
     BorderSurface {
         anchors.fill: parent
         radius: Math.round(10 * hero.uiScale)
@@ -68,8 +65,6 @@ Item {
             border.color: Util.alpha(Color.menu.text, 0.18)
         }
 
-        // Shown until (or instead of) the capture, so there is never a
-        // black rectangle while the compositor grabs the surface.
         Column {
             anchors.centerIn: parent
             spacing: 8
@@ -107,7 +102,4 @@ Item {
 
         }
     }
-
-    // App name and title sit under the preview, at a size that stays legible
-    // instead of shrinking into a single elided line.
 }

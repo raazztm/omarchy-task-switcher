@@ -11,13 +11,9 @@ Item {
     property var ctl: null
     focus: true
 
-    // Authored against a 1536x864 reference display, then scaled to whatever
-    // screen this actually runs on, so the panel keeps its proportions from
-    // 1280x720 laptops up to 4K without ever overflowing the display.
     readonly property real screenW: ctl && ctl.screen ? ctl.screen.width : 1536
     readonly property real screenH: ctl && ctl.screen ? ctl.screen.height : 864
 
-    // Test hook: force a scale to check a size the current display cannot show.
     property real uiScaleOverride: 0
     readonly property real uiScale: uiScaleOverride > 0 ? uiScaleOverride
         : Math.max(0.55, Math.min(1.35, Math.min(screenW / 1536, screenH / 864)))
@@ -58,9 +54,6 @@ Item {
         return width
     }
 
-    // Opacity budget for the card. The wallpaper and window content sit
-    // directly behind the panel, so anything below ~0.9 turns the caption-size
-    // row text into a guessing game.
     readonly property real panelAlpha: 0.99
     readonly property real scrimAlpha: 0.62
 
@@ -214,8 +207,6 @@ Item {
         borderSpec: Border.surfaceSpec("menu", "border", Color.menu.border, 1)
         clip: true
 
-        // Lit from the top: a soft sheen instead of a flat fill, so a nearly
-        // opaque card still has depth rather than reading as a painted box.
         Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
@@ -274,8 +265,6 @@ Item {
             }
         }
 
-        // Hairlines give the card a header/body/footer structure instead of
-        // three text blocks floating in one field.
         Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
@@ -385,8 +374,6 @@ Item {
                     }
                 }
 
-                // Rail scroll indicator, hand-rolled to avoid pulling in
-                // QtQuick.Controls just for a three pixel bar.
                 Rectangle {
                     id: railThumb
                     visible: rail.contentWidth > rail.width && rail.contentWidth > 0

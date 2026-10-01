@@ -142,7 +142,6 @@ function buildEntries(toplevels, mode, focusedWorkspaceId) {
             fullscreen: ipc.fullscreen || 0,
             pinned: ipc.pinned === true,
             urgent: toplevel.urgent === true,
-            // Hyprland gives the focused window focusHistoryID 0.
             activated: history === 0
         })
     }

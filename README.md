@@ -5,7 +5,7 @@ modifier, tap <kbd>Tab</kbd> to walk the windows, release to focus the one you
 landed on — with a live preview of the highlighted window and a rail of every
 open window underneath it.
 
-![screenshot](docs/screenshot.png)
+![Task switcher](preview.png)
 
 ## Requirements
 
@@ -15,14 +15,27 @@ open window underneath it.
 
 ## Install
 
+Install from the Omarchy plugin marketplace, then add the keybindings:
+
+```bash
+omarchy plugin add https://github.com/raazztm/omarchy-task-switcher.git --enable
+~/.config/omarchy/plugins/oma.task-switcher/install.sh
+```
+
+The second command is not optional. Omarchy installs and enables the plugin, but
+it has no way to add Hyprland keybindings. The plugin registers its own global
+shortcuts; the binds the installer writes are what actually fire them.
+
+Or clone and run the installer directly, which does both:
+
 ```bash
 git clone https://github.com/raazztm/omarchy-task-switcher.git
 cd omarchy-task-switcher
 ./install.sh
 ```
 
-`install.sh` copies the plugin into `~/.config/omarchy/plugins/`, registers it in
-`~/.config/omarchy/shell.json`, writes the keybindings into
+Either way `install.sh` copies the plugin into `~/.config/omarchy/plugins/`,
+registers it in `~/.config/omarchy/shell.json`, writes the keybindings into
 `~/.config/hypr/bindings.lua` between marker comments, and restarts the shell.
 Both edited files are backed up once as `<file>.bak-<timestamp>`, and re-running
 the installer is safe.
@@ -61,18 +74,22 @@ configuration.
 ## Layout
 
 ```
-plugin/
+manifest.json          plugin registration, at the repository root
+qml/
   TaskSwitcher.qml      state machine, shortcuts, the overlay surface
   SwitcherView.qml      panel, header, window rail, responsive sizing
   HeroPreview.qml       live screencapture preview of the selection
   WindowRow.qml         one window in the rail
   KeyCap.qml            the hint chips in the footer
   TaskSwitcherLogic.js  entry building, grouping, rail layout
-  manifest.json         plugin registration
 hypr/
   task-switcher-binds.lua   the keybindings install.sh injects
 install.sh / uninstall.sh
 ```
+
+`manifest.json` sits in the repository root, which is the layout the
+[Omarchy plugin marketplace](https://plugins.omarchy.org/) requires for new
+submissions and the layout `omarchy plugin add` expects.
 
 ## Notes
 

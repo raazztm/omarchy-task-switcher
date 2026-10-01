@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
-# Removes the plugin, its shell.json entry and its keybindings.
-# Original files are restored from the .bak-* the installer created.
-
 set -euo pipefail
 
-PLUGIN_ID="nayan.task-switcher"
+PLUGIN_ID="oma.task-switcher"
 SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEST="$HOME/.config/omarchy/plugins/$PLUGIN_ID"
 SHELL_JSON="$HOME/.config/omarchy/shell.json"
@@ -13,6 +10,7 @@ BEGIN="-- >>> $PLUGIN_ID >>>"
 END="-- <<< $PLUGIN_ID <<<"
 
 say() { printf '\033[1;35m==>\033[0m %s\n' "$*"; }
+warn() { printf '\033[1;33m warn:\033[0m %s\n' "$*" >&2; }
 die() { printf '\033[1;31merror:\033[0m %s\n' "$*" >&2; exit 1; }
 
 command -v python3 >/dev/null || die "python3 is required"
@@ -59,7 +57,6 @@ pattern = re.compile(
 )
 text, n = pattern.subn("", text)
 
-# Catch a hand-made install that never had the marker comments.
 kept, buf, depth, legacy = [], [], 0, 0
 for line in text.splitlines(keepends=True):
     buf.append(line)
@@ -83,8 +80,6 @@ else:
 PY
 fi
 
-# The keybindings live in the Hyprland config, which "omarchy restart shell"
-# does not reload.
 hyprctl reload >/dev/null 2>&1 || warn "hyprctl reload failed; bindings need a Hyprland reload"
 say "restarting the shell"
 omarchy restart shell || warn "log out and back in instead"
